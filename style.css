@@ -1,0 +1,74 @@
+:root{
+  --board-w: 320px;
+  --board-h: 400px;
+  --pad: 12px;
+}
+html,body{height:100%;}
+body {
+  font-family: 'Noto Serif JP', serif;
+  background-color: #f5f0e6;
+  margin: 0;
+  padding: var(--pad);
+  display: grid;
+  place-items: start center;
+  gap: 10px;
+}
+/* スマホベース: 盤面は幅に合わせてスケール */
+.scale-holder{ transform-origin: top center; display:inline-block; }
+@media (max-width: 480px){
+  .scale-holder{ transform: scale(calc((100vw - (var(--pad)*2)) / 320)); }
+}
+
+/* 盤面 */
+#game-container {
+  position: relative;
+  width: var(--board-w);
+  height: var(--board-h);
+  background: #d2b48c url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+  background-size: 300px auto;
+  border: 6px solid #5a3a22;
+  border-radius: 6px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.2);
+}
+#exit { position: absolute; bottom: -12px; left: 80px; width: 160px; height: 12px; background: repeating-linear-gradient(90deg, #bbb 0 6px, #eee 6px 12px); border: 2px solid #5a3a22; border-top: none; }
+
+/* 駒 */
+.piece{
+  position:absolute; box-sizing:border-box; border:2px solid #5a3a22;
+  background:#deb887 url('https://www.transparenttextures.com/patterns/wood-pattern.png'); background-size:260px auto;
+  display:flex; justify-content:center; align-items:center;
+  font-family:'Yuji Syuku','Noto Serif JP',serif; font-size:1.6em; font-weight:700; color:#111;
+  text-shadow:0 1px 0 rgba(255,255,255,.35); cursor:grab; writing-mode:vertical-rl; text-orientation:upright;
+  border-radius:4px; box-shadow:inset 0 0 3px rgba(0,0,0,0.25);
+  transition:left .3s ease, top .3s ease;
+}
+.piece:active{ cursor:grabbing; z-index:10; }
+#musume{ font-size:5em; color:#b22222; }
+#sub1{ writing-mode:horizontal-tb; text-orientation:initial; }
+
+/* コントロール */
+#controls{ text-align:center; width: min(var(--board-w), 100%); }
+.btn-row{ display:flex; gap:10px; justify-content:center; margin-top:8px; }
+#reset-button,#rank-close,#rank-clear{ padding:12px 16px; font-size:16px; border:none; border-radius:10px; cursor:pointer; }
+#reset-button{ background:#4CAF50; color:#fff; }
+#rank-close{ background:#9ca3af; color:#fff; }
+#rank-clear{ background:#ef4444; color:#fff; }
+#clear-message{ margin-top:8px; font-size:18px; font-weight:700; color:#e53935; visibility:hidden; }
+
+/* ランキング（モーダル） */
+#rank-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; }
+#rank-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:min(420px,92vw); background:#fffaf0; border:2px solid #5a3a22; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.35); display:none; }
+#rank-modal.open,#rank-overlay.open{ display:block; }
+.rank-head{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px solid #dec7a3; }
+#rank-list{ max-height:60vh; overflow:auto; padding:8px 12px; }
+.rank-row{ display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:8px; padding:8px 6px; border-bottom:1px dashed #d6b894; }
+.rank-row .moves{ font-weight:700; }
+.rank-row button{ padding:8px 10px; border:none; border-radius:8px; cursor:pointer; font-size:14px; }
+.rank-row .play{ background:#10b981; color:#fff; }
+.rank-row .del{ background:#9ca3af; color:#fff; }
+.rank-actions{ display:flex; justify-content:flex-end; gap:8px; padding:10px 12px; }
+
+/* 右上固定の王冠FAB */
+#rank-fab{ position:fixed; top: env(safe-area-inset-top, 8px); right: calc(env(safe-area-inset-right, 8px) + 8px); width:48px; height:48px; border:none; background:rgba(255,255,255,.7); backdrop-filter: blur(6px); border-radius:999px; display:grid; place-items:center; box-shadow:0 6px 16px rgba(0,0,0,.25); z-index: 1000; }
+#rank-fab svg{ width:28px; height:28px; fill:gold; stroke:#5a3a22; stroke-width:1.2; }
+@media (min-width:481px){ #rank-fab{ top:16px; right:16px; } }
